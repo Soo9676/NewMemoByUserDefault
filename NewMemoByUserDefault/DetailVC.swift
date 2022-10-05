@@ -25,6 +25,7 @@ class DetailVC: UIViewController {
     }
     
     func setup(key: String?) {
+        
         if let key = key {
     //    key로 userdefaults 값 조회해서 decode후 상세화면에 뿌려주기
             if let jsonString: String = defaults.string(forKey: key) {
@@ -36,12 +37,12 @@ class DetailVC: UIViewController {
                 titleTextField.text = memoData?.title
                 contentsTextView.text = memoData?.contents
                 updateButton.setTitle("update", for: .normal)
-            } else {
-                self.title = "메모 생성하기"
-                titleTextField.placeholder = "새로운 메모를 입력하세요"
-                contentsTextView.text = ""
-                updateButton.setTitle("cerate", for: .normal)
             }
+        } else {
+            self.title = "메모 생성하기"
+            titleTextField.placeholder = "새로운 메모를 입력하세요"
+            contentsTextView.text = ""
+            updateButton.setTitle("cerate", for: .normal)
         }
     }
     
