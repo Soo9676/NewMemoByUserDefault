@@ -61,18 +61,18 @@
                                                                             <rect key="frame" x="0.0" y="53.5" width="414" height="50"/>
                                                                             <subviews>
                                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d5h-WN-z47">
-                                                                                    <rect key="frame" x="20" y="14" width="274" height="20.5"/>
+                                                                                    <rect key="frame" x="20" y="14" width="264" height="20.5"/>
                                                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                                                     <nil key="textColor"/>
                                                                                     <nil key="highlightedColor"/>
                                                                                 </label>
                                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WIO-f7-mbR">
-                                                                                    <rect key="frame" x="324" y="9" width="70" height="31"/>
+                                                                                    <rect key="frame" x="314" y="9" width="80" height="31"/>
                                                                                     <constraints>
-                                                                                        <constraint firstAttribute="width" constant="70" id="Qhs-SU-jan"/>
+                                                                                        <constraint firstAttribute="width" constant="80" id="Qhs-SU-jan"/>
                                                                                     </constraints>
                                                                                     <state key="normal" title="Button"/>
-                                                                                    <buttonConfiguration key="configuration" style="tinted" title="Button"/>
+                                                                                    <buttonConfiguration key="configuration" style="tinted" title="Update"/>
                                                                                     <connections>
                                                                                         <action selector="tapUpdateButton:" destination="8dy-OZ-eeQ" eventType="touchUpInside" id="IBE-5g-HbN"/>
                                                                                     </connections>

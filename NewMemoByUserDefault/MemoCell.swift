@@ -30,6 +30,7 @@ class MemoCell: UITableViewCell {
             configurationUIwithData() 
         }
     }
+    
     var updateButtonPressed: (MemoCell) -> Void = { (sender) in }
     
     var title: String?
@@ -44,16 +45,10 @@ class MemoCell: UITableViewCell {
         
         timeLabel.text = lastUpdateTime
         titleLabel.text = title
-        
     }
 //    업데이트 버튼 누르면 클로저를 통해 세그웨이로 detailVC로 이동
     @IBAction func tapUpdateButton(_ sender: Any) {
         //뷰컨트롤러에서 전달받은 클로저를 실행 (self = cell을 전달)
         updateButtonPressed(self)
     }
-    
-    
-    
-    
-
 }

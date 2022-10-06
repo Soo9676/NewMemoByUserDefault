@@ -23,15 +23,18 @@ class MainViewController: UIViewController {
     
     
     override func viewWillAppear(_ animated: Bool) {
-        memoTableView.reloadData()
+        if let keyList = defaults.value(forKey: "memoKeyList") as? [String] {
+            self.keyList = keyList
+            memoTableView.reloadData()
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         if let keyList = defaults.value(forKey: "memoKeyList") as? [String] {
             self.keyList = keyList
+            memoTableView.reloadData()
         }
-        
     }
     
     @IBAction func addBarButttonTapped(_ sender: Any) {
@@ -64,11 +67,9 @@ class MainViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "MoveToDeatail" {
+        if segue.identifier == "MoveToDetail" {
             let detailVC = segue.destination as! DetailVC
             guard let indexPath = sender as? IndexPath else {return}
-//            detailVC.memoDateList = self.memoDateList
-            
             detailVC.key = keyList[indexPath.row]
             print("keyDate 전달 완료")
         }
@@ -89,13 +90,29 @@ extension MainViewController: UITableViewDataSource {
             cell.memoData = memoStruct
         }
         cell.key = keyList[indexPath.row]
-
+        cell.updateButtonPressed = { [weak self] (senderCall) in
+            //뷰컨트롤러에 있는 세그웨이 실행
+            self?.performSegue(withIdentifier: "MoveToDetail", sender: indexPath)
+        }
         return cell
     }
 }
 
 extension MainViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        let dateToEdit = keyList[indexPath.row]
+        if editingStyle == .delete {
+            //delete your item here and reload the table
+            keyList.remove(at: indexPath.row)
+            defaults.set(keyList, forKey: "memoKeyList")
+            defaults.synchronize()
+            memoTableView.deleteRows(at: [indexPath], with: .fade)
+            print("before", defaults.value(forKey: dateToEdit))
+            defaults.removeObject(forKey: dateToEdit)
+            print("after", defaults.value(forKey: dateToEdit))
+            memoTableView.reloadData()
+        }
+    }
 }
 
 

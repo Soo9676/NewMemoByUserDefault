@@ -18,7 +18,6 @@ class DetailVC: UIViewController {
     var defaults = UserDefaults.standard
     var memoData: Memo?
     
-    
 //    viewDidLoad 단계에서 받은 key로 수정/생성화면 구분해서 셋업
     override func viewDidLoad() {
         setup(key: key)
@@ -73,7 +72,7 @@ class DetailVC: UIViewController {
 
 //    업데이트 버튼 누르면 현재 화면값과 key로 조회한 데이터값 비교해 수정/생성하기
     @IBAction func tapUpdateButton(_ sender: Any) {
-                var jsonString: String?
+        var jsonString: String?
         let currentTime = recordCurrentTime()
         //현재 화면에 입력된 값 Memo Struct -> json String으로 생성
         if let title = titleTextField.text,
@@ -82,24 +81,30 @@ class DetailVC: UIViewController {
             jsonString = convertMemotoJSONString(memoStruct: newMemo)
         }
         //    키없으면 새로 생성, 키 있으면 해당 키로 userdefaults에 덮어 씌우기
-        if let keyList = defaults.value(forKey: "memoKeyList") as? [String] {
-            if let key = key {
-                defaults.set(jsonString, forKey: key)
-                defaults.synchronize()
-            } else {
-                let newKeyList = keyList + [currentTime]
-                defaults.set(newKeyList, forKey: "memoKeyList")
-                defaults.set(jsonString, forKey: currentTime)
-                defaults.synchronize()
-            }
+        updateMemo(jsonString: jsonString ?? "nil", currentTime: currentTime){
+            self.navigationController?.popViewController(animated: true)
         }
-        
         //    userdefualts 동기화
         //    버튼 눌러앞으로 이동 및 메인 테이블뷰 리로드
     }
     
     func recordCurrentTime() -> String {
         return String(Date.now.timeIntervalSince1970)
+    }
+    
+    func updateMemo(jsonString: String, currentTime: String, completion: @escaping () -> Void){
+        if let key = key {
+            defaults.set(jsonString, forKey: key)
+            defaults.synchronize()
+            completion()
+        } else {
+            let keyList = defaults.value(forKey: "memoKeyList") as? [String] ?? []
+            let newKeyList = keyList + [currentTime]
+            defaults.set(newKeyList, forKey: "memoKeyList")
+            defaults.set(jsonString, forKey: currentTime)
+            defaults.synchronize()
+            completion()
+        }
     }
     
     //다른 곳을 터치하면 키보드 내리기
