@@ -100,6 +100,7 @@ class DetailVC: UIViewController {
         } else {
             let keyList = defaults.value(forKey: "memoKeyList") as? [String] ?? []
             let newKeyList = keyList + [currentTime]
+            //MARK: 키리스트 여기말고 메인에서 수정 (키만 넘겨줌)
             defaults.set(newKeyList, forKey: "memoKeyList")
             defaults.set(jsonString, forKey: currentTime)
             defaults.synchronize()
