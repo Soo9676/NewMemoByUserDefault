@@ -113,3 +113,16 @@ class DetailVC: UIViewController {
         view.endEditing(true)
     }
 }
+
+extension DetailVC {
+    func inputToMemo() -> Memo {
+        let currentTime = recordCurrentTime()
+        if let title = titleTextField.text,
+           let contents = contentsTextView.text {
+            let newMemo: Memo = Memo.init(title: title, contents: contents, lastUpdateTime: currentTime)
+            return newMemo
+        }
+        return Memo(title: "no input", contents: "no input", lastUpdateTime: "no input")
+    }
+}
+

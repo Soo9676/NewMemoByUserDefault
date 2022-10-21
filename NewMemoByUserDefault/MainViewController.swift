@@ -115,4 +115,12 @@ extension MainViewController: UITableViewDelegate {
     }
 }
 
+extension MainViewController {
+//    func inputToMemo() -> Memo {
+//        
+//
+//        return memo
+//    }
+}
+
 
