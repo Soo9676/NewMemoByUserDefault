@@ -39,12 +39,7 @@ class UserDefaultsRepository: Repository {
     var defaults = UserDefaults.standard
     
     func createMemo(title: String, contents: String, lastUpdateTime: String, uuid: String) -> Memo {
-        var memo: Memo = Memo(title: "", contents: "", lastUpdateTime: "", uuid: "")
-        memo.title = title
-        memo.contents = contents
-        memo.lastUpdateTime = lastUpdateTime
-        memo.uuid = uuid
-        
+        var memo: Memo = Memo(title: title, contents: contents, lastUpdateTime: lastUpdateTime, uuid: uuid)
      return memo
     }
     
@@ -70,9 +65,12 @@ class UserDefaultsRepository: Repository {
     }
     
     func updateMemo(memo: Memo) {
+        
         let key = memo.uuid
         defaults.set(memo, forKey: key)
         if var keyList = defaults.object(forKey: "keyList") as? [String] {
+//            if keyList.contains()
+            
             keyList.append(key)
             defaults.set(keyList, forKey: "keyList")
         }
