@@ -7,12 +7,6 @@
 
 import UIKit
 
-struct Memo: Codable {
-    var title: String
-    var contents: String
-    var lastUpdateTime: String
-}
-
 class MainViewController: UIViewController {
     
     let defaults = UserDefaults.standard
@@ -63,7 +57,7 @@ class MainViewController: UIViewController {
         } catch {
             print("Unable to Encode/Decode Note due to \(error)")
         }
-        return Memo.init(title: "null", contents: "null", lastUpdateTime: "null")
+        return Memo.init(title: "null", contents: "null", lastUpdateTime: "null", uuid: "null")
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

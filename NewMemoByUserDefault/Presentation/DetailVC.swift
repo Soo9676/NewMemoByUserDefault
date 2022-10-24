@@ -67,17 +67,18 @@ class DetailVC: UIViewController {
         } catch {
             print("Unable to Encode/Decode Note due to \(error)")
         }
-        return Memo.init(title: "null", contents: "null", lastUpdateTime: "null")
+        return Memo.init(title: "null", contents: "null", lastUpdateTime: "null", uuid: "null")
     }
 
 //    업데이트 버튼 누르면 현재 화면값과 key로 조회한 데이터값 비교해 수정/생성하기
     @IBAction func tapUpdateButton(_ sender: Any) {
         var jsonString: String?
         let currentTime = recordCurrentTime()
+        let uuid = UUID().uuidString
         //현재 화면에 입력된 값 Memo Struct -> json String으로 생성
         if let title = titleTextField.text,
            let contents = contentsTextView.text {
-            let newMemo: Memo = Memo.init(title: title, contents: contents, lastUpdateTime: currentTime)
+            let newMemo: Memo = Memo.init(title: title, contents: contents, lastUpdateTime: currentTime, uuid: uuid)
             jsonString = convertMemotoJSONString(memoStruct: newMemo)
         }
         //    키없으면 새로 생성, 키 있으면 해당 키로 userdefaults에 덮어 씌우기
@@ -117,12 +118,13 @@ class DetailVC: UIViewController {
 extension DetailVC {
     func inputToMemo() -> Memo {
         let currentTime = recordCurrentTime()
+        let uuid = UUID().uuidString
         if let title = titleTextField.text,
            let contents = contentsTextView.text {
-            let newMemo: Memo = Memo.init(title: title, contents: contents, lastUpdateTime: currentTime)
+            let newMemo: Memo = Memo.init(title: title, contents: contents, lastUpdateTime: currentTime, uuid: uuid)
             return newMemo
         }
-        return Memo(title: "no input", contents: "no input", lastUpdateTime: "no input")
+        return Memo(title: "no input", contents: "no input", lastUpdateTime: "no input", uuid: "no input")
     }
 }
 
