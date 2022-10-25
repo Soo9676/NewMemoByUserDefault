@@ -8,7 +8,7 @@
 import Foundation
 
 //MARK: Repository protocol
-protocol Repository {
+protocol RepositoryProtocol {
     
     associatedtype T
     
@@ -20,7 +20,22 @@ protocol Repository {
     
 }
 
-class MemoManager<T: Repository> {
+protocol ObjectSavable {
+    func setObject<Object>(_ object: Object) throws -> String where Object: Encodable
+    func getObject<Object>(jsonString: String) throws -> Object where Object: Decodable
+}
+
+enum ObjectSavableError: String, LocalizedError {
+    case unableToEncode = "Unable to encode object into data"
+    case noValue = "No data object found for the given key"
+    case unableToDecode = "Unable to decode object into given type"
+    
+    var errorDescription: String? {
+        rawValue
+    }
+}
+
+class MemoManager<T: RepositoryProtocol> {
     var memoRepository: T
     
     init(repository: T) {
@@ -32,7 +47,32 @@ class MemoManager<T: Repository> {
     }
 }
 
-class UserDefaultsRepository: Repository {
+class UserDefaultsRepository: RepositoryProtocol, ObjectSavable {
+    func setObject<Object>(_ object: Object) throws -> String where Object : Encodable {
+        let encoder = JSONEncoder()
+                do {
+                    let data = try encoder.encode(object)
+                    let jsonString: String? = String.init(data: data, encoding: .utf8)
+                    if let jsonString = jsonString {
+                        return jsonString
+                    }
+                } catch {
+                    throw ObjectSavableError.unableToEncode
+                }
+    }
+    
+    func getObject<Object>(jsonString: String) throws -> Object where Object : Decodable {
+        let decoder = JSONDecoder()
+        do {
+            if let jsonData = jsonString.data(using: .utf8) {
+                let memoObject = try decoder.decode(Object, from: jsonData)
+                return memoObject
+            }
+        } catch {
+            throw ObjectSavableError.unableToDecode
+        }
+    }
+    
     
  typealias T = Memo
     
@@ -40,6 +80,8 @@ class UserDefaultsRepository: Repository {
     
     func createMemo(title: String, contents: String, lastUpdateTime: String, uuid: String) -> Memo {
         var memo: Memo = Memo(title: title, contents: contents, lastUpdateTime: lastUpdateTime, uuid: uuid)
+        defaults.set(memo, forKey: memo.uuid)
+        
      return memo
     }
     
@@ -67,12 +109,14 @@ class UserDefaultsRepository: Repository {
     func updateMemo(memo: Memo) {
         
         let key = memo.uuid
-        defaults.set(memo, forKey: key)
         if var keyList = defaults.object(forKey: "keyList") as? [String] {
-//            if keyList.contains()
-            
-            keyList.append(key)
-            defaults.set(keyList, forKey: "keyList")
+            if keyList.contains(key) {
+                defaults.set(memo, forKey: key)
+            } else {
+                keyList.append(key)
+                defaults.set(keyList, forKey: "keyList")
+                defaults.set(memo, forKey: key)
+            }
         }
     }
     

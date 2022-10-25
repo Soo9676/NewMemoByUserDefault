@@ -48,6 +48,7 @@ class DetailVC: UIViewController {
     func convertMemotoJSONString(memoStruct: Memo) -> String {
         do {
             let jsonData = try JSONEncoder().encode(memoStruct)
+            set(jsonData, forKey: )
             let jsonString: String? = String.init(data: jsonData, encoding: .utf8)
             if let jsonString = jsonString {
                 return jsonString
