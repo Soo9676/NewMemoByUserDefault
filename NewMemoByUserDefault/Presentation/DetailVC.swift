@@ -45,31 +45,31 @@ class DetailVC: UIViewController {
         }
     }
     
-    func convertMemotoJSONString(memoStruct: Memo) -> String {
-        do {
-            let jsonData = try JSONEncoder().encode(memoStruct)
-            set(jsonData, forKey: )
-            let jsonString: String? = String.init(data: jsonData, encoding: .utf8)
-            if let jsonString = jsonString {
-                return jsonString
-            }
-        } catch {
-            print("Unable to Encode/Decode Note due to \(error)")
-        }
-        return "return Nothing"
-    }
-    
-    func convertJSONStringtoMemo(jsonString: String) -> Memo {
-        do {
-            if let jsonData = jsonString.data(using: .utf8) {
-                let memoStruct = try JSONDecoder().decode(Memo.self, from: jsonData)
-                return memoStruct
-            }
-        } catch {
-            print("Unable to Encode/Decode Note due to \(error)")
-        }
-        return Memo.init(title: "null", contents: "null", lastUpdateTime: "null", uuid: "null")
-    }
+//    func convertMemotoJSONString(memoStruct: Memo) -> String {
+//        do {
+//            let jsonData = try JSONEncoder().encode(memoStruct)
+//            set(jsonData, forKey: )
+//            let jsonString: String? = String.init(data: jsonData, encoding: .utf8)
+//            if let jsonString = jsonString {
+//                return jsonString
+//            }
+//        } catch {
+//            print("Unable to Encode/Decode Note due to \(error)")
+//        }
+//        return "return Nothing"
+//    }
+//    
+//    func convertJSONStringtoMemo(jsonString: String) -> Memo {
+//        do {
+//            if let jsonData = jsonString.data(using: .utf8) {
+//                let memoStruct = try JSONDecoder().decode(Memo.self, from: jsonData)
+//                return memoStruct
+//            }
+//        } catch {
+//            print("Unable to Encode/Decode Note due to \(error)")
+//        }
+//        return Memo.init(title: "null", contents: "null", lastUpdateTime: "null", uuid: "null")
+//    }
 
 //    업데이트 버튼 누르면 현재 화면값과 key로 조회한 데이터값 비교해 수정/생성하기
     @IBAction func tapUpdateButton(_ sender: Any) {

@@ -21,8 +21,8 @@ protocol RepositoryProtocol {
 }
 
 protocol ObjectSavable {
-    func setObject<Object>(_ object: Object) throws -> String where Object: Encodable
-    func getObject<Object>(jsonString: String) throws -> Object where Object: Decodable
+    func setObject<Object>(_ object: Object, forKey: String) throws where Object: Encodable
+    func getObject<Object>(jsonString: String, forKey: String) throws -> Object where Object: Decodable
 }
 
 enum ObjectSavableError: String, LocalizedError {
@@ -53,9 +53,34 @@ class UserDefaultsRepository: RepositoryProtocol {
     
     var defaults = UserDefaults.standard
     
+    func convertMemotoJSONString(memoStruct: Memo) throws -> String {
+        do {
+            let jsonData = try JSONEncoder().encode(memoStruct)
+            let jsonString: String? = String.init(data: jsonData, encoding: .utf8)
+            if let jsonString = jsonString {
+                return jsonString
+            }
+        } catch {
+            print("Unable to Encode/Decode Note due to \(error)")
+        }
+        throw ObjectSavableError.unableToEncode
+    }
+    
+    func convertJSONStringtoMemo(jsonString: String) throws -> Memo {
+        do {
+            if let jsonData = jsonString.data(using: .utf8) {
+                let memoStruct = try JSONDecoder().decode(Memo.self, from: jsonData)
+                return memoStruct
+            }
+        } catch {
+            print("Unable to Encode/Decode Note due to \(error)")
+        }
+        throw ObjectSavableError.unableToDecode
+    }
+    
     func createMemo(title: String, contents: String, lastUpdateTime: String, uuid: String) -> Memo {
         var memo: Memo = Memo(title: title, contents: contents, lastUpdateTime: lastUpdateTime, uuid: uuid)
-        if let encodedMemo = try? UserDefaults.setObject(memo){
+        if let encodedMemo = try? convertMemotoJSONString(memoStruct: memo) {
             defaults.set(encodedMemo, forKey: memo.uuid)
         }
      return memo
@@ -66,8 +91,10 @@ class UserDefaultsRepository: RepositoryProtocol {
         if let keyList = defaults.object(forKey: "keyList") as? [String] {
             let memoRange = 0...(keyList.count - 1)
             for i in memoRange{
-                if let memo = defaults.object(forKey: keyList[i]) as? Memo {
-                    memos.append(memo)
+                if let memo = defaults.object(forKey: keyList[i]) as? String {
+                    if let decodedMemo: Memo = try? convertJSONStringtoMemo(jsonString: memo) {
+                        memos.append(decodedMemo)
+                    }
                 }
             }
         }
