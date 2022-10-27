@@ -47,32 +47,7 @@ class MemoManager<T: RepositoryProtocol> {
     }
 }
 
-class UserDefaultsRepository: RepositoryProtocol, ObjectSavable {
-    func setObject<Object>(_ object: Object) throws -> String where Object : Encodable {
-        let encoder = JSONEncoder()
-                do {
-                    let data = try encoder.encode(object)
-                    let jsonString: String? = String.init(data: data, encoding: .utf8)
-                    if let jsonString = jsonString {
-                        return jsonString
-                    }
-                } catch {
-                    throw ObjectSavableError.unableToEncode
-                }
-    }
-    
-    func getObject<Object>(jsonString: String) throws -> Object where Object : Decodable {
-        let decoder = JSONDecoder()
-        do {
-            if let jsonData = jsonString.data(using: .utf8) {
-                let memoObject = try decoder.decode(Object, from: jsonData)
-                return memoObject
-            }
-        } catch {
-            throw ObjectSavableError.unableToDecode
-        }
-    }
-    
+class UserDefaultsRepository: RepositoryProtocol {
     
  typealias T = Memo
     
@@ -80,8 +55,9 @@ class UserDefaultsRepository: RepositoryProtocol, ObjectSavable {
     
     func createMemo(title: String, contents: String, lastUpdateTime: String, uuid: String) -> Memo {
         var memo: Memo = Memo(title: title, contents: contents, lastUpdateTime: lastUpdateTime, uuid: uuid)
-        defaults.set(memo, forKey: memo.uuid)
-        
+        if let encodedMemo = try? UserDefaults.setObject(memo){
+            defaults.set(encodedMemo, forKey: memo.uuid)
+        }
      return memo
     }
     
