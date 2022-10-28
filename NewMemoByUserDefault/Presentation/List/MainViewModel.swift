@@ -34,7 +34,6 @@ struct MemoRequestModel: Equatable {
     var contents: String
     var lastUpdateTime: String
     
-    
     init(){
         title = ""
         contents = ""

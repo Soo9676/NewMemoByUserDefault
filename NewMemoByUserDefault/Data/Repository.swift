@@ -15,7 +15,8 @@ protocol RepositoryProtocol {
     func createMemo(title: String, contents: String, lastUpdateTime: String, uuid: String) -> T
     func readAllMemos() -> [T]
     func readAMemo(objectWith key: String) -> T
-    func updateMemo(memo: Memo)
+    func readKeyList(listNamed name: String) -> [String]
+    func updateMemo(memo: Memo, completion: @escaping () -> Void)
     func delete(objectWith key: String)
     
 }
@@ -108,19 +109,27 @@ class UserDefaultsRepository: RepositoryProtocol {
         }
         return memo
     }
+    func readKeyList(listNamed name: String) -> [String] {
+        let keyList: Array<String> = []
+        if let keyList = defaults.stringArray(forKey: name) {
+            return keyList
+        }
+        return keyList
+    }
     
-    func updateMemo(memo: Memo) {
+    func updateMemo(memo: Memo, completion: @escaping () -> Void) {
         
         let key = memo.uuid
-        if var keyList = defaults.object(forKey: "keyList") as? [String] {
-            if keyList.contains(key) {
-                defaults.set(memo, forKey: key)
-            } else {
-                keyList.append(key)
-                defaults.set(keyList, forKey: "keyList")
-                defaults.set(memo, forKey: key)
-            }
+        var keyList = readKeyList(listNamed: "keyList")
+        
+        if keyList.contains(key) {
+            defaults.set(memo, forKey: key)
+        } else {
+            keyList.append(key)
+            defaults.set(keyList, forKey: "keyList")
+            defaults.set(memo, forKey: key)
         }
+        defaults.synchronize()
     }
     
     func delete(objectWith key: String) {
@@ -129,6 +138,7 @@ class UserDefaultsRepository: RepositoryProtocol {
             if let i = keyList.firstIndex(of: key) {
                 keyList.remove(at: i)
                 defaults.set(keyList, forKey: "keyList")
+                defaults.synchronize()
             }
         }
     }

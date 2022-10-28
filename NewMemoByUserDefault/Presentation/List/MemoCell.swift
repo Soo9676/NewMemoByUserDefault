@@ -37,7 +37,7 @@ class MemoCell: UITableViewCell {
     var contents: String?
     var lastUpdateTime: String?
     
-//    테이블뷰 dataSource에서 넘겨받은 해독된 Memo 타입의 객체 값을 UI에 뿌려주기
+//    테이블뷰 dataSource에서 넘겨받은 Memo 타입의 객체 값을 UI에 뿌려주기
     func configurationUIwithData() {
         title = memoData?.title
         contents = memoData?.contents
