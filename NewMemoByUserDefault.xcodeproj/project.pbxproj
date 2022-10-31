@@ -18,11 +18,6 @@
 		6F703D7129027AB4007BF705 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F703D7029027AB4007BF705 /* Repository.swift */; };
 		6F703D7629062703007BF705 /* MemoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F703D7529062703007BF705 /* MemoEntity.swift */; };
 		6F703D7829062D87007BF705 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F703D7729062D87007BF705 /* MainViewModel.swift */; };
-		6F703D7A29062FE1007BF705 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F703D7929062FE1007BF705 /* Protocols.swift */; };
-		6FD7DAA9290A7BE000236713 /* UserDefault+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD7DAA8290A7BE000236713 /* UserDefault+Extension.swift */; };
-		6FD7DAAC290B62E200236713 /* CreateMemoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD7DAAB290B62E200236713 /* CreateMemoViewModel.swift */; };
-		6FD7DAAE290B63CC00236713 /* EditMemoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD7DAAD290B63CC00236713 /* EditMemoViewModel.swift */; };
-		6FD7DAB6290B6D7400236713 /* MemoDataSourceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD7DAB5290B6D7400236713 /* MemoDataSourceProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,11 +34,6 @@
 		6F703D7029027AB4007BF705 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		6F703D7529062703007BF705 /* MemoEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoEntity.swift; sourceTree = "<group>"; };
 		6F703D7729062D87007BF705 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
-		6F703D7929062FE1007BF705 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
-		6FD7DAA8290A7BE000236713 /* UserDefault+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefault+Extension.swift"; sourceTree = "<group>"; };
-		6FD7DAAB290B62E200236713 /* CreateMemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMemoViewModel.swift; sourceTree = "<group>"; };
-		6FD7DAAD290B63CC00236713 /* EditMemoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemoViewModel.swift; sourceTree = "<group>"; };
-		6FD7DAB5290B6D7400236713 /* MemoDataSourceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoDataSourceProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,7 +69,6 @@
 				6F703D732906254C007BF705 /* Presentation */,
 				6F703D7229062527007BF705 /* Domain */,
 				6F703D742906255C007BF705 /* Data */,
-				6FD7DAAA290A7BF100236713 /* Extension */,
 				6F3235A828EC302C0010FBFA /* AppDelegate.swift */,
 				6F3235AA28EC302C0010FBFA /* SceneDelegate.swift */,
 				6F3235B128EC302E0010FBFA /* Assets.xcassets */,
@@ -93,7 +82,6 @@
 			isa = PBXGroup;
 			children = (
 				6F703D7529062703007BF705 /* MemoEntity.swift */,
-				6F703D7929062FE1007BF705 /* Protocols.swift */,
 			);
 			path = Domain;
 			sourceTree = "<group>";
@@ -103,8 +91,6 @@
 			children = (
 				6F3235AE28EC302C0010FBFA /* Main.storyboard */,
 				6FD7DAB4290B64A700236713 /* List */,
-				6FD7DAB3290B649900236713 /* Edit */,
-				6FD7DAAF290B63DE00236713 /* Create */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -113,34 +99,8 @@
 			isa = PBXGroup;
 			children = (
 				6F703D7029027AB4007BF705 /* Repository.swift */,
-				6FD7DAB5290B6D7400236713 /* MemoDataSourceProtocol.swift */,
 			);
 			path = Data;
-			sourceTree = "<group>";
-		};
-		6FD7DAAA290A7BF100236713 /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-				6FD7DAA8290A7BE000236713 /* UserDefault+Extension.swift */,
-			);
-			path = Extension;
-			sourceTree = "<group>";
-		};
-		6FD7DAAF290B63DE00236713 /* Create */ = {
-			isa = PBXGroup;
-			children = (
-				6F3235BC28ED15360010FBFA /* DetailVC.swift */,
-				6FD7DAAB290B62E200236713 /* CreateMemoViewModel.swift */,
-			);
-			path = Create;
-			sourceTree = "<group>";
-		};
-		6FD7DAB3290B649900236713 /* Edit */ = {
-			isa = PBXGroup;
-			children = (
-				6FD7DAAD290B63CC00236713 /* EditMemoViewModel.swift */,
-			);
-			path = Edit;
 			sourceTree = "<group>";
 		};
 		6FD7DAB4290B64A700236713 /* List */ = {
@@ -149,6 +109,7 @@
 				6F3235AC28EC302C0010FBFA /* MainViewController.swift */,
 				6F703D7729062D87007BF705 /* MainViewModel.swift */,
 				6F3235BE28ED15DB0010FBFA /* MemoCell.swift */,
+				6F3235BC28ED15360010FBFA /* DetailVC.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -224,19 +185,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6FD7DAA9290A7BE000236713 /* UserDefault+Extension.swift in Sources */,
 				6F3235BF28ED15DB0010FBFA /* MemoCell.swift in Sources */,
-				6FD7DAAE290B63CC00236713 /* EditMemoViewModel.swift in Sources */,
 				6F3235AD28EC302C0010FBFA /* MainViewController.swift in Sources */,
-				6FD7DAAC290B62E200236713 /* CreateMemoViewModel.swift in Sources */,
 				6F3235BD28ED15360010FBFA /* DetailVC.swift in Sources */,
-				6F703D7A29062FE1007BF705 /* Protocols.swift in Sources */,
 				6F3235A928EC302C0010FBFA /* AppDelegate.swift in Sources */,
 				6F3235AB28EC302C0010FBFA /* SceneDelegate.swift in Sources */,
 				6F703D7129027AB4007BF705 /* Repository.swift in Sources */,
 				6F703D7629062703007BF705 /* MemoEntity.swift in Sources */,
 				6F703D7829062D87007BF705 /* MainViewModel.swift in Sources */,
-				6FD7DAB6290B6D7400236713 /* MemoDataSourceProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

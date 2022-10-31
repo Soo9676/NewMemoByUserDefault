@@ -25,10 +25,9 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let keyList = defaults.value(forKey: "memoKeyList") as? [String] {
-            self.keyList = keyList
-            memoTableView.reloadData()
-        }
+        let keyList = repository.readKeyList(listNamed: "keyList")
+        self.keyList = keyList
+        memoTableView.reloadData()
     }
     
     @IBAction func addBarButttonTapped(_ sender: Any) {
@@ -69,7 +68,6 @@ extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let dateToEdit = keyList[indexPath.row]
         if editingStyle == .delete {
-
             keyList.remove(at: indexPath.row)
             memoTableView.deleteRows(at: [indexPath], with: .fade)
             repository.delete(objectWith: dateToEdit)

@@ -21,19 +21,14 @@ protocol RepositoryProtocol {
     
 }
 
-protocol ObjectSavable {
-    func setObject<Object>(_ object: Object, forKey: String) throws where Object: Encodable
-    func getObject<Object>(jsonString: String, forKey: String) throws -> Object where Object: Decodable
-}
-
 enum ObjectSavableError: String, LocalizedError {
-    case unableToEncode = "Unable to encode object into data"
-    case noValue = "No data object found for the given key"
-    case unableToDecode = "Unable to decode object into given type"
     
     var errorDescription: String? {
         rawValue
     }
+    case unableToEncode = "Unable to encode object into data"
+    case noValue = "No data object found for the given key"
+    case unableToDecode = "Unable to decode object into given type"
 }
 
 class MemoManager<T: RepositoryProtocol> {
@@ -103,12 +98,16 @@ class UserDefaultsRepository: RepositoryProtocol {
     }
     
     func readAMemo(objectWith key: String) -> Memo {
-        var memo: Memo = Memo(title: "", contents: "", lastUpdateTime: "", uuid: "")
-        if let memoToGet = defaults.object(forKey: key) as? Memo {
-            memo = memoToGet
+        var memo: Memo = Memo(title: "Unable to decode", contents: "Unable to decode", lastUpdateTime: "Unable to decode", uuid: "Unable to decode")
+        if let memoToGet = defaults.object(forKey: key) as? String {
+            if let decodedMemo = try? convertJSONStringtoMemo(jsonString: memoToGet) as Memo {
+                memo = decodedMemo
+                return memo
+            }
         }
         return memo
     }
+    
     func readKeyList(listNamed name: String) -> [String] {
         let keyList: Array<String> = []
         if let keyList = defaults.stringArray(forKey: name) {
@@ -123,13 +122,14 @@ class UserDefaultsRepository: RepositoryProtocol {
         var keyList = readKeyList(listNamed: "keyList")
         
         if keyList.contains(key) {
-            defaults.set(memo, forKey: key)
+            defaults.synchronize()
+            completion()
         } else {
             keyList.append(key)
             defaults.set(keyList, forKey: "keyList")
-            defaults.set(memo, forKey: key)
+            defaults.synchronize()
+            completion()
         }
-        defaults.synchronize()
     }
     
     func delete(objectWith key: String) {

@@ -56,9 +56,9 @@ class DetailVC: UIViewController {
            let contents = contentsTextView.text {
             //키없으면 새로 생성, 키 있으면 해당 키로 userdefaults에 덮어 씌우기
             if let key = key {
-                memoData = repository.createMemo(title: title, contents: contents, lastUpdateTime: currentTime, uuid: key)
+                memoData = try! repository.createMemo(title: title, contents: contents, lastUpdateTime: currentTime, uuid: key)
             } else {
-                memoData = repository.createMemo(title: title, contents: contents, lastUpdateTime: currentTime, uuid: uuid)
+                memoData = try! repository.createMemo(title: title, contents: contents, lastUpdateTime: currentTime, uuid: uuid)
             }
         }
         guard let memoData = memoData else { return }
@@ -71,23 +71,7 @@ class DetailVC: UIViewController {
     func recordCurrentTime() -> String {
         return String(Date.now.timeIntervalSince1970)
     }
-    
-    func updateMemo(jsonString: String, currentTime: String, completion: @escaping () -> Void){
-        if let key = key {
-            defaults.set(jsonString, forKey: key)
-            defaults.synchronize()
-            completion()
-        } else {
-            let keyList = defaults.value(forKey: "memoKeyList") as? [String] ?? []
-            let newKeyList = keyList + [currentTime]
-            //MARK: 키리스트 여기말고 메인에서 수정 (키만 넘겨줌)
-            defaults.set(newKeyList, forKey: "memoKeyList")
-            defaults.set(jsonString, forKey: currentTime)
-            defaults.synchronize()
-            completion()
-        }
-    }
-    
+
     //다른 곳을 터치하면 키보드 내리기
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
