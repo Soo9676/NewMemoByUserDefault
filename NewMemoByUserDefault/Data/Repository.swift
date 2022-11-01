@@ -10,12 +10,10 @@ import Foundation
 //MARK: Repository protocol
 protocol RepositoryProtocol {
     
-    associatedtype T
-    
-    func createMemo(title: String, contents: String, lastUpdateTime: String, uuid: String) -> T
-    func readAllMemos() -> [T]
-    func readAMemo(objectWith key: String) -> T
-    func readKeyList(listNamed name: String) -> [String]
+    func createMemo(title: String, contents: String, lastUpdateTime: String, uuid: String) -> Memo
+    func readAllMemos() -> [Memo]
+    func readAMemo(objectWith key: String) -> Memo
+//    func readKeyList(listNamed name: String) -> [String]
     func updateMemo(memo: Memo, completion: @escaping () -> Void)
     func delete(objectWith key: String)
     
@@ -44,9 +42,7 @@ class MemoManager<T: RepositoryProtocol> {
 }
 
 class UserDefaultsRepository: RepositoryProtocol {
-    
- typealias T = Memo
-    
+        
     var defaults = UserDefaults.standard
     
     func convertMemotoJSONString(memoStruct: Memo) throws -> String {

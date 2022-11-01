@@ -25,6 +25,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let keyList = repository.readKeyList(listNamed: "keyList")
         self.keyList = keyList
         memoTableView.reloadData()
