@@ -17,7 +17,6 @@
 		6F3235BF28ED15DB0010FBFA /* MemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F3235BE28ED15DB0010FBFA /* MemoCell.swift */; };
 		6F703D7129027AB4007BF705 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F703D7029027AB4007BF705 /* Repository.swift */; };
 		6F703D7629062703007BF705 /* MemoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F703D7529062703007BF705 /* MemoEntity.swift */; };
-		6F703D7829062D87007BF705 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F703D7729062D87007BF705 /* MainViewModel.swift */; };
 		6FCC02932910DFD40089154A /* RepositorySQLite.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCC02922910DFD40089154A /* RepositorySQLite.swift */; };
 		6FCC02962910E6CA0089154A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FCC02952910E6CA0089154A /* libsqlite3.tbd */; };
 /* End PBXBuildFile section */
@@ -35,7 +34,6 @@
 		6F3235BE28ED15DB0010FBFA /* MemoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCell.swift; sourceTree = "<group>"; };
 		6F703D7029027AB4007BF705 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		6F703D7529062703007BF705 /* MemoEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoEntity.swift; sourceTree = "<group>"; };
-		6F703D7729062D87007BF705 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		6FCC02922910DFD40089154A /* RepositorySQLite.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositorySQLite.swift; sourceTree = "<group>"; };
 		6FCC02952910E6CA0089154A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		6FCC02972910E7560089154A /* NewMemoByUserDefault-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NewMemoByUserDefault-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -124,7 +122,6 @@
 			isa = PBXGroup;
 			children = (
 				6F3235AC28EC302C0010FBFA /* MainViewController.swift */,
-				6F703D7729062D87007BF705 /* MainViewModel.swift */,
 				6F3235BE28ED15DB0010FBFA /* MemoCell.swift */,
 				6F3235BC28ED15360010FBFA /* DetailVC.swift */,
 			);
@@ -210,7 +207,6 @@
 				6F703D7129027AB4007BF705 /* Repository.swift in Sources */,
 				6FCC02932910DFD40089154A /* RepositorySQLite.swift in Sources */,
 				6F703D7629062703007BF705 /* MemoEntity.swift in Sources */,
-				6F703D7829062D87007BF705 /* MainViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

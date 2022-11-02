@@ -8,15 +8,13 @@
 import Foundation
 
 //MARK: Repository protocol
-protocol RepositoryProtocol {
-    
-    func createMemo(title: String, contents: String, lastUpdateTime: String, uuid: String) -> Memo
-    func readAllMemos() -> [Memo]
-    func readAMemo(objectWith key: String) -> Memo
-//    func readKeyList(listNamed name: String) -> [String]
-    func updateMemo(memo: Memo, completion: @escaping () -> Void)
-    func delete(objectWith key: String)
-    
+protocol MemoRepositoryProtocol {
+    func createTable(named name: String)
+    func insert(memo: Memo)
+    func getRecordList() -> [Memo]
+    func getRecord(recordtWith key: String) -> Memo
+    func update(memo: Memo, completion: @escaping () -> Void)
+    func delete(recordWith key: String)
 }
 
 enum ObjectSavableError: String, LocalizedError {
@@ -27,18 +25,6 @@ enum ObjectSavableError: String, LocalizedError {
     case unableToEncode = "Unable to encode object into data"
     case noValue = "No data object found for the given key"
     case unableToDecode = "Unable to decode object into given type"
-}
-
-class MemoManager<T: RepositoryProtocol> {
-    var memoRepository: T
-    
-    init(repository: T) {
-        self.memoRepository = repository
-    }
-    
-    func whichMemo() -> String {
-        return "\(T.self)"
-    }
 }
 
 class UserDefaultsRepository: RepositoryProtocol {

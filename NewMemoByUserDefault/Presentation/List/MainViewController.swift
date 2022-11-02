@@ -10,7 +10,7 @@ import UIKit
 class MainViewController: UIViewController {
     
     let defaults = UserDefaults.standard
-    let repository = UserDefaultsRepository()
+    let repository = MemoRepository()
     var keyList: [String] = []
     
     @IBOutlet weak var memoTableView: UITableView!
