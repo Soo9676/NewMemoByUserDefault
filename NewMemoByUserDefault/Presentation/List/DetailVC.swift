@@ -14,26 +14,24 @@ class DetailVC: UIViewController {
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var updateButton: UIButton!
     
-    var repository = UserDefaultsRepository()
-    var key: String?
-    var defaults = UserDefaults.standard
+    var repository = MemoRepository()
+    var id: Int?
     var memoData: Memo?
     
 //    viewDidLoad 단계에서 받은 key로 수정/생성화면 구분해서 셋업
     override func viewDidLoad() {
-        setup(key: key)
+        setup(id: id)
     }
     
-    func setup(key: String?) {
+    func setup(id: Int?) {
         
-        if let key = key {
-            //key로 userdefaults 값 조회해서 decode후 상세화면에 뿌려주기
-            memoData = repository.readAMemo(objectWith: key)
-            print("memoData: \(String(describing: memoData))")
+        if let id = id {
+            //id로 memoTable 값 조회해서 decode후 상세화면에 뿌려주기
+            memoData = repository.getRecord(recordtWith: id)
             
             self.title = "메모 수정하기"
             titleTextField.text = memoData?.title
-            contentsTextView.text = memoData?.contents
+            contentsTextView.text = memoData?.content
             updateButton.setTitle("update", for: .normal)
             
         } else {
@@ -53,23 +51,24 @@ class DetailVC: UIViewController {
         let uuid = UUID().uuidString
 
         if let title = titleTextField.text,
-           let contents = contentsTextView.text {
-            //키없으면 새로 생성, 키 있으면 해당 키로 userdefaults에 덮어 씌우기
-            if let key = key {
-                memoData = try! repository.createMemo(title: title, contents: contents, lastUpdateTime: currentTime, uuid: key)
+           let content = contentsTextView.text {
+            var memo = Memo(title: title, content: content, lastUpdateTime: currentTime, id: 0)
+            //id없으면 insert, id 있으면 해당 id로 update
+            if let id = id {
+                memo.id = id
+                repository.update(memo: memo) {
+                    self.navigationController?.popViewController(animated: true)
+                }
             } else {
-                memoData = try! repository.createMemo(title: title, contents: contents, lastUpdateTime: currentTime, uuid: uuid)
+                repository.insert(memo: memo) {
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
-        }
-        guard let memoData = memoData else { return }
-//        if let key = key
-        repository.updateMemo(memo: memoData){
-            self.navigationController?.popViewController(animated: true)
         }
     }
     
-    func recordCurrentTime() -> String {
-        return String(Date.now.timeIntervalSince1970)
+    func recordCurrentTime() -> Double {
+        return Date.now.timeIntervalSince1970
     }
 
     //다른 곳을 터치하면 키보드 내리기

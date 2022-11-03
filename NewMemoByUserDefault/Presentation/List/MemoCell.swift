@@ -24,7 +24,7 @@ class MemoCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var updateButton: UIButton!
     
-    var key: String = ""
+    var id: Int = 0
     var memoData: Memo?{
         didSet{
             configurationUIwithData() 
@@ -35,7 +35,7 @@ class MemoCell: UITableViewCell {
     
     var title: String?
     var contents: String?
-    var lastUpdateTime: String?
+    var lastUpdateTime: Double?
     
 //    테이블뷰 dataSource에서 넘겨받은 Memo 타입의 객체 값을 UI에 뿌려주기
     func configurationUIwithData() {
@@ -43,7 +43,7 @@ class MemoCell: UITableViewCell {
         contents = memoData?.contents
         lastUpdateTime = memoData?.lastUpdateTime
         
-        timeLabel.text = lastUpdateTime
+        timeLabel.text = String(lastUpdateTime)
         titleLabel.text = title
     }
 //    업데이트 버튼 누르면 클로저를 통해 세그웨이로 detailVC로 이동

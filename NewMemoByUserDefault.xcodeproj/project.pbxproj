@@ -71,6 +71,7 @@
 		6F3235A728EC302C0010FBFA /* NewMemoByUserDefault */ = {
 			isa = PBXGroup;
 			children = (
+				6FCC02972910E7560089154A /* NewMemoByUserDefault-Bridging-Header.h */,
 				6F703D732906254C007BF705 /* Presentation */,
 				6F703D7229062527007BF705 /* Domain */,
 				6F703D742906255C007BF705 /* Data */,
@@ -105,7 +106,6 @@
 			children = (
 				6F703D7029027AB4007BF705 /* Repository.swift */,
 				6FCC02922910DFD40089154A /* RepositorySQLite.swift */,
-				6FCC02972910E7560089154A /* NewMemoByUserDefault-Bridging-Header.h */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -369,7 +369,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ootd.NewMemoByUserDefault;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "NewMemoByUserDefault-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "NewMemoByUserDefault/NewMemoByUserDefault-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -398,7 +398,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ootd.NewMemoByUserDefault;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "NewMemoByUserDefault-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "NewMemoByUserDefault/NewMemoByUserDefault-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

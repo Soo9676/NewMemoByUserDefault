@@ -9,25 +9,30 @@ import UIKit
 
 class MainViewController: UIViewController {
     
-    let defaults = UserDefaults.standard
     let repository = MemoRepository()
-    var keyList: [String] = []
+    var idList: [Int] = []
+    var memoList: [Memo] = []
     
     @IBOutlet weak var memoTableView: UITableView!
     @IBOutlet weak var addBarButton: UIBarButtonItem!
     
     
     override func viewWillAppear(_ animated: Bool) {
-        let keyList = repository.readKeyList(listNamed: "keyList")
-        self.keyList = keyList
+        memoList = repository.getRecordList()
+        let idList = memoList.map({ (memo: Memo) -> Int in
+            return memo.id
+        })
+        self.idList = idList
         memoTableView.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let keyList = repository.readKeyList(listNamed: "keyList")
-        self.keyList = keyList
+        memoList = repository.getRecordList()
+        let idList = memoList.map({ (memo: Memo) -> Int in
+            return memo.id
+        })
+        self.idList = idList
         memoTableView.reloadData()
     }
     
@@ -39,24 +44,24 @@ class MainViewController: UIViewController {
         if segue.identifier == "MoveToDetail" {
             let detailVC = segue.destination as! DetailVC
             guard let indexPath = sender as? IndexPath else {return}
-            detailVC.key = keyList[indexPath.row]
-            print("keyDate 전달 완료")
+            detailVC.id = idList[indexPath.row]
+            print("id 전달 완료")
         }
     }
 }
 
 extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return keyList.count
+        return idList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var key = keyList[indexPath.row]
+        var id = idList[indexPath.row]
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MemoCell", for: indexPath) as? MemoCell else {return UITableViewCell()}
 
-        cell.memoData = repository.readAMemo(objectWith: key)
-        cell.key = key
+        cell.memoData = repository.getRecord(recordtWith: id)
+        cell.id = id
         cell.updateButtonPressed = { [weak self] (senderCall) in
             //뷰컨트롤러에 있는 세그웨이 실행
             self?.performSegue(withIdentifier: "MoveToDetail", sender: indexPath)
@@ -67,11 +72,11 @@ extension MainViewController: UITableViewDataSource {
 
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let dateToEdit = keyList[indexPath.row]
+        let dateToEdit = idList[indexPath.row]
         if editingStyle == .delete {
-            keyList.remove(at: indexPath.row)
+            idList.remove(at: indexPath.row)
             memoTableView.deleteRows(at: [indexPath], with: .fade)
-            repository.delete(objectWith: dateToEdit)
+            repository.delete(recordWith: dateToEdit)
             memoTableView.reloadData()
         }
     }

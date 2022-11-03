@@ -10,7 +10,7 @@ import Foundation
 struct Memo: Codable {
     var title: String
     var content: String
-    var lastUpdateTime: String
-    var uuid: String
+    var lastUpdateTime: Double
+    var id: Int
 }
 
