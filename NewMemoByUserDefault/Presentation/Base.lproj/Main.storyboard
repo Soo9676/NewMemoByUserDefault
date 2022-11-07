@@ -5,6 +5,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -120,12 +121,84 @@
                                             <outlet property="delegate" destination="BYZ-38-t0r" id="MFK-yZ-YVs"/>
                                         </connections>
                                     </tableView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AKa-8e-l4w">
+                                        <rect key="frame" x="0.0" y="714" width="414" height="60"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fPW-cF-ijY">
+                                                <rect key="frame" x="10" y="3" width="394" height="54"/>
+                                                <subviews>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iOv-Ex-QJ1">
+                                                        <rect key="frame" x="0.0" y="0.0" width="54" height="54"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="iOv-Ex-QJ1" secondAttribute="height" multiplier="1:1" id="Nf4-hR-aVg"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                    </button>
+                                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="qgx-8n-CBI">
+                                                        <rect key="frame" x="54" y="0.0" width="286" height="54"/>
+                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="o7n-x9-sg8">
+                                                            <size key="itemSize" width="128" height="128"/>
+                                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                                        </collectionViewFlowLayout>
+                                                        <cells>
+                                                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="pageCell" id="e4b-uF-2Q5" customClass="PageCell" customModule="NewMemoByUserDefault" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="v8l-P0-isK">
+                                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <subviews>
+                                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yCU-Yx-cyy">
+                                                                            <rect key="frame" x="26" y="48" width="76" height="31"/>
+                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                            <state key="normal" title="Button"/>
+                                                                            <buttonConfiguration key="configuration" style="tinted" title="Number"/>
+                                                                        </button>
+                                                                    </subviews>
+                                                                </collectionViewCellContentView>
+                                                                <connections>
+                                                                    <outlet property="pageButton" destination="yCU-Yx-cyy" id="GIH-x1-9sv"/>
+                                                                </connections>
+                                                            </collectionViewCell>
+                                                        </cells>
+                                                        <connections>
+                                                            <outlet property="dataSource" destination="BYZ-38-t0r" id="w8n-Fa-kJV"/>
+                                                            <outlet property="delegate" destination="BYZ-38-t0r" id="hwL-OT-Uqf"/>
+                                                        </connections>
+                                                    </collectionView>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MwQ-hc-KLh">
+                                                        <rect key="frame" x="340" y="0.0" width="54" height="54"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" secondItem="MwQ-hc-KLh" secondAttribute="height" multiplier="1:1" id="bf6-v9-99D"/>
+                                                        </constraints>
+                                                        <state key="normal" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstItem="fPW-cF-ijY" firstAttribute="leading" secondItem="AKa-8e-l4w" secondAttribute="leading" constant="10" id="AGz-xm-K9I"/>
+                                            <constraint firstAttribute="height" constant="60" id="JTe-8K-B8R"/>
+                                            <constraint firstItem="fPW-cF-ijY" firstAttribute="top" secondItem="AKa-8e-l4w" secondAttribute="top" constant="3" id="bA0-e4-fMt"/>
+                                            <constraint firstAttribute="trailing" secondItem="fPW-cF-ijY" secondAttribute="trailing" constant="10" id="bSb-EO-dcG"/>
+                                            <constraint firstAttribute="bottom" secondItem="fPW-cF-ijY" secondAttribute="bottom" constant="3" id="pPM-a7-iaT"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="AKa-8e-l4w" secondAttribute="bottom" id="6Ug-1t-KVO"/>
+                                    <constraint firstItem="AKa-8e-l4w" firstAttribute="top" secondItem="Y5t-tu-X6E" secondAttribute="bottom" constant="-60" id="Ay1-7h-ARh"/>
                                     <constraint firstItem="Y5t-tu-X6E" firstAttribute="leading" secondItem="Cf5-RH-wym" secondAttribute="leading" id="DwF-9k-OcM"/>
+                                    <constraint firstItem="AKa-8e-l4w" firstAttribute="leading" secondItem="Cf5-RH-wym" secondAttribute="leading" id="XzR-9x-NV8"/>
                                     <constraint firstItem="Y5t-tu-X6E" firstAttribute="top" secondItem="Cf5-RH-wym" secondAttribute="top" id="e6d-a5-QlF"/>
-                                    <constraint firstAttribute="bottom" secondItem="Y5t-tu-X6E" secondAttribute="bottom" id="lfZ-vO-eVb"/>
+                                    <constraint firstAttribute="trailing" secondItem="AKa-8e-l4w" secondAttribute="trailing" id="sub-6F-VmN"/>
                                     <constraint firstAttribute="trailing" secondItem="Y5t-tu-X6E" secondAttribute="trailing" id="t0M-yp-YN6"/>
                                 </constraints>
                             </view>
@@ -149,6 +222,10 @@
                     <connections>
                         <outlet property="addBarButton" destination="VFn-R1-aab" id="Cud-7t-Lg5"/>
                         <outlet property="memoTableView" destination="Y5t-tu-X6E" id="PzV-7S-KLr"/>
+                        <outlet property="moveToLeftPageButton" destination="iOv-Ex-QJ1" id="thV-wk-Lvf"/>
+                        <outlet property="moveToRightPageButton" destination="MwQ-hc-KLh" id="oeK-cv-dkI"/>
+                        <outlet property="pagesCollection" destination="qgx-8n-CBI" id="92O-wo-SiH"/>
+                        <outlet property="viewEmbeddingStack" destination="AKa-8e-l4w" id="bEQ-00-YRF"/>
                         <segue destination="el4-S9-WzD" kind="show" identifier="MoveToDetail" id="ugy-Rk-TsB"/>
                     </connections>
                 </viewController>

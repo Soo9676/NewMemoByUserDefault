@@ -18,6 +18,7 @@ class MemoRepository: MemoRepositoryProtocol {
     }
     
     var db: OpaquePointer? //SQLite 연결 정보를 담을 객체
+    var numberOfMemoInPage: Int? // 한페이지당 보여줄 데이터 개수 
 
     func getDBPath() -> String {
         let fileManager = FileManager()
@@ -46,7 +47,7 @@ class MemoRepository: MemoRepositoryProtocol {
 //        }
       
         var statement: OpaquePointer? //컴파일된 SQL을 담을 객체
-        let sql = "CREATE TABLE IF NOT EXISTS memo (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, last_update_time REAL NOT NULL)"
+        let sql = "CREATE TABLE IF NOT EXISTS memo (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, last_update_time REAL NOT NULL)"
         //SQL 컴파일이 잘 끝났다면
         guard sqlite3_prepare(db, sql, -1, &statement, nil) == SQLITE_OK else {            print("\nPrepare Statement Fail")
             
@@ -100,9 +101,9 @@ class MemoRepository: MemoRepositoryProtocol {
         let insertStatementString = "INSERT INTO memo (id, title, content, last_update_time) VALUES (?,?,?,?)"
 
         if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
-            var title: String = memo.title
-            var content: String = memo.content
-            var lastUpdateTime: Double = memo.lastUpdateTime
+            let title: String = memo.title
+            let content: String = memo.content
+            let lastUpdateTime: Double = memo.lastUpdateTime
             
             //값 바인딩
             sqlite3_bind_text(insertStatement, 2, title.cString(using: .utf8), -1, nil)
@@ -143,7 +144,7 @@ class MemoRepository: MemoRepositoryProtocol {
                 let title = String(cString: queryResultColTitle)
                 let content = String(cString: queryResultColContent)
                 let lastUpdateTime = queryResultColLastUpdateTime
-                var memo: Memo = Memo(title: title, content: content, lastUpdateTime: lastUpdateTime, id: Int(id))
+                let memo: Memo = Memo(title: title, content: content, lastUpdateTime: lastUpdateTime, id: Int(id))
                 memoArray.append(memo)
             }
         }
@@ -156,7 +157,7 @@ class MemoRepository: MemoRepositoryProtocol {
         let queryStatementString = "SELECT id, title, content, last_update_time FROM memo WHERE id = ?;"
         
         if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
-            let memoId = sqlite3_bind_int(queryStatement, 1, Int32(id))
+            sqlite3_bind_int(queryStatement, 1, Int32(id))
             //execute statement
             if sqlite3_step(queryStatement) == SQLITE_ROW {
                 //read value of title column
@@ -190,10 +191,10 @@ class MemoRepository: MemoRepositoryProtocol {
         let updateStatementString = "UPDATE memo SET title = ?, content = ?, last_update_time = ? WHERE id = ?;"
         
         if sqlite3_prepare_v2(db, updateStatementString, -1, &updateStatement, nil) == SQLITE_OK {
-            let id = sqlite3_bind_int(updateStatement, 4, Int32(memo.id))
-            let title = sqlite3_bind_text(updateStatement, 1, memo.title.cString(using: .utf8), -1, nil)
-            let content = sqlite3_bind_text(updateStatement, 2, memo.content.cString(using: .utf8), -1, nil)
-            let lastUpdateTime = sqlite3_bind_double(updateStatement, 3, memo.lastUpdateTime)
+            sqlite3_bind_int(updateStatement, 4, Int32(memo.id))
+            sqlite3_bind_text(updateStatement, 1, memo.title.cString(using: .utf8), -1, nil)
+            sqlite3_bind_text(updateStatement, 2, memo.content.cString(using: .utf8), -1, nil)
+            sqlite3_bind_double(updateStatement, 3, memo.lastUpdateTime)
             if sqlite3_step(updateStatement) == SQLITE_DONE {
                 completion()
                 print("\nSuccessfully updated row.")
@@ -210,7 +211,8 @@ class MemoRepository: MemoRepositoryProtocol {
 //        let db = openDatabase()
         var deleteStatement: OpaquePointer?
         let deleteStatementString = "DELETE FROM memo WHERE id = ?"
-        let id = sqlite3_bind_int(deleteStatement, 1, Int32(id))
+        
+        sqlite3_bind_int(deleteStatement, 1, Int32(id))
         
         if sqlite3_prepare_v2(db, deleteStatementString, -1, &deleteStatement, nil) == SQLITE_OK {
             if sqlite3_step(deleteStatement) == SQLITE_DONE {
@@ -222,5 +224,35 @@ class MemoRepository: MemoRepositoryProtocol {
             print("\nDELETE statement could not be prepared")
         }
         sqlite3_finalize(deleteStatement)
+    }
+    
+    func getTotalPageList() -> [Int] {
+        let numberOfMemo = getRecordList().count
+        var totalPageList: [Int] = []
+        guard let numberOfMemoInPage = numberOfMemoInPage else {
+            return []
+        }
+        if numberOfMemo <= numberOfMemoInPage {
+            return [1]
+        } else {
+            let quotient: Int = numberOfMemo/numberOfMemoInPage
+            let remainder: Int = numberOfMemo%numberOfMemoInPage
+            if remainder == 0 {
+                totalPageList.append(contentsOf: 1...quotient)
+            } else {
+                totalPageList.append(contentsOf: 1...(quotient + 1))
+            }
+            return totalPageList
+        }
+    }
+    
+    func getRecordListInPage(pageNumber: Int) -> [Memo] {
+        var queryStatement: OpaquePointer?
+        var queryStatementString: String = "SELECT id, title, content, last_update_time FROM memo WHERE id = ?;"
+        var totalRecordList: [Memo] = getRecordList()
+        
+        
+        
+        return []
     }
 }

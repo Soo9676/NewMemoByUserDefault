@@ -15,6 +15,7 @@
 		6F3235B528EC302E0010FBFA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F3235B328EC302E0010FBFA /* LaunchScreen.storyboard */; };
 		6F3235BD28ED15360010FBFA /* DetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F3235BC28ED15360010FBFA /* DetailVC.swift */; };
 		6F3235BF28ED15DB0010FBFA /* MemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F3235BE28ED15DB0010FBFA /* MemoCell.swift */; };
+		6F5379272918D5B200DF672D /* PageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F5379262918D5B200DF672D /* PageCell.swift */; };
 		6F703D7129027AB4007BF705 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F703D7029027AB4007BF705 /* Repository.swift */; };
 		6F703D7629062703007BF705 /* MemoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F703D7529062703007BF705 /* MemoEntity.swift */; };
 		6F8423902914E4880044B338 /* memo.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 6F84238F2914E4880044B338 /* memo.sqlite */; };
@@ -33,6 +34,7 @@
 		6F3235B628EC302E0010FBFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6F3235BC28ED15360010FBFA /* DetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
 		6F3235BE28ED15DB0010FBFA /* MemoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoCell.swift; sourceTree = "<group>"; };
+		6F5379262918D5B200DF672D /* PageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCell.swift; sourceTree = "<group>"; };
 		6F703D7029027AB4007BF705 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		6F703D7529062703007BF705 /* MemoEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoEntity.swift; sourceTree = "<group>"; };
 		6F84238F2914E4880044B338 /* memo.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = memo.sqlite; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 			children = (
 				6F3235AC28EC302C0010FBFA /* MainViewController.swift */,
 				6F3235BE28ED15DB0010FBFA /* MemoCell.swift */,
+				6F5379262918D5B200DF672D /* PageCell.swift */,
 				6F3235BC28ED15360010FBFA /* DetailVC.swift */,
 			);
 			path = List;
@@ -208,6 +211,7 @@
 				6F3235BD28ED15360010FBFA /* DetailVC.swift in Sources */,
 				6F3235A928EC302C0010FBFA /* AppDelegate.swift in Sources */,
 				6F3235AB28EC302C0010FBFA /* SceneDelegate.swift in Sources */,
+				6F5379272918D5B200DF672D /* PageCell.swift in Sources */,
 				6F703D7129027AB4007BF705 /* Repository.swift in Sources */,
 				6FCC02932910DFD40089154A /* RepositorySQLite.swift in Sources */,
 				6F703D7629062703007BF705 /* MemoEntity.swift in Sources */,
