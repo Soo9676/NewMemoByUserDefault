@@ -11,7 +11,7 @@ import Foundation
 protocol MemoRepositoryProtocol {
     func insert(memo: Memo, completion: @escaping () -> Void)
     func getRecordList() -> [Memo]
-    func getRecord(recordtWith id: Int) -> Memo
+    func getRecord(recordtWith id: Int) -> Memo?
     func update(memo: Memo, completion: @escaping () -> Void)
     func delete(recordWith id: Int)
 }

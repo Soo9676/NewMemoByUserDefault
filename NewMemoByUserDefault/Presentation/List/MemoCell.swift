@@ -40,10 +40,10 @@ class MemoCell: UITableViewCell {
 //    테이블뷰 dataSource에서 넘겨받은 Memo 타입의 객체 값을 UI에 뿌려주기
     func configurationUIwithData() {
         title = memoData?.title
-        contents = memoData?.contents
+        contents = memoData?.content
         lastUpdateTime = memoData?.lastUpdateTime
         
-        timeLabel.text = String(lastUpdateTime)
+        timeLabel.text = "\(lastUpdateTime ?? 0)"
         titleLabel.text = title
     }
 //    업데이트 버튼 누르면 클로저를 통해 세그웨이로 detailVC로 이동
