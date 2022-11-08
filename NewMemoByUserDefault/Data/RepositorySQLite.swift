@@ -18,7 +18,7 @@ class MemoRepository: MemoRepositoryProtocol {
     }
     
     var db: OpaquePointer? //SQLite 연결 정보를 담을 객체
-    var numberOfMemoInPage: Int? // 한페이지당 보여줄 데이터 개수 
+    var numberOfMemoInPage: Int = 4// 한페이지당 보여줄 데이터 개수
 
     func getDBPath() -> String {
         let fileManager = FileManager()
@@ -113,6 +113,7 @@ class MemoRepository: MemoRepositoryProtocol {
             //쿼리 실행하기 위해 스텝 밟기
             if sqlite3_step(insertStatement) == SQLITE_DONE {
                 print("\nSuccesfully inserted row")
+                completion()
             } else {
                 print("\nCould not insert row")
             }
@@ -161,10 +162,10 @@ class MemoRepository: MemoRepositoryProtocol {
             //execute statement
             if sqlite3_step(queryStatement) == SQLITE_ROW {
                 //read value of title column
-                let id = Int(sqlite3_column_int(queryStatement, 0))
-                let queryResultColLastUpdateTime = sqlite3_column_double(queryStatement, 3)
-                guard let queryResultColTitle = sqlite3_column_text(queryStatement, 1),
-                      let queryResultColContent = sqlite3_column_text(queryStatement, 2) else {
+                let id = Int(sqlite3_column_int(queryStatement, 1))
+                let queryResultColLastUpdateTime = sqlite3_column_double(queryStatement, 4)
+                guard let queryResultColTitle = sqlite3_column_text(queryStatement, 2),
+                      let queryResultColContent = sqlite3_column_text(queryStatement, 3) else {
                     print("\nQuery result is nil")
                     return nil
                 }
@@ -226,17 +227,18 @@ class MemoRepository: MemoRepositoryProtocol {
         sqlite3_finalize(deleteStatement)
     }
     
+    //페이지 컨트롤에 띄울 전체 리스트 리스트 반환
     func getTotalPageList() -> [Int] {
-        let numberOfMemo = getRecordList().count
+        let totalNumberOfMemo = getRecordList().count
         var totalPageList: [Int] = []
-        guard let numberOfMemoInPage = numberOfMemoInPage else {
-            return []
-        }
-        if numberOfMemo <= numberOfMemoInPage {
+//        guard let numberOfMemoInPage = numberOfMemoInPage else {
+//            return []
+//        }
+        if totalNumberOfMemo <= numberOfMemoInPage {
             return [1]
         } else {
-            let quotient: Int = numberOfMemo/numberOfMemoInPage
-            let remainder: Int = numberOfMemo%numberOfMemoInPage
+            let quotient: Int = totalNumberOfMemo/numberOfMemoInPage
+            let remainder: Int = totalNumberOfMemo%numberOfMemoInPage
             if remainder == 0 {
                 totalPageList.append(contentsOf: 1...quotient)
             } else {
@@ -246,13 +248,53 @@ class MemoRepository: MemoRepositoryProtocol {
         }
     }
     
-    func getRecordListInPage(pageNumber: Int) -> [Memo] {
+    //페이지 컨트롤에 띄울 최대길이 5인 리스트 반환
+    func getPageListToShow(selectedPage: Int) -> [Int] {
+        let totalPage = getTotalPageList()
+        var pageListToShow: [Int] = []
+        if totalPage.count > 5 {
+            if selectedPage <= 3 {
+                return [1,2,3,4,5]
+            } else if  selectedPage >= (totalPage.count - 2) {
+                pageListToShow.append(contentsOf: (totalPage.count - 4)...totalPage.count)
+                return pageListToShow
+            } else {
+                pageListToShow.append(contentsOf: (selectedPage - 2)...(selectedPage + 2))
+                return pageListToShow
+            }
+        } else {
+            return totalPage
+        }
+    }
+    
+    //선택된 페이지에 띄울 메모내용 선택 (쿼리에 LIMIT 사용)
+    func getRecordListInPage(selectedPage: Int, recordPerPage: Int) -> [Memo] {
         var queryStatement: OpaquePointer?
-        var queryStatementString: String = "SELECT id, title, content, last_update_time FROM memo WHERE id = ?;"
-        var totalRecordList: [Memo] = getRecordList()
+        let queryStatementString: String = "SELECT id, title, content, last_update_time FROM memo LIMIT ? OFFSET ?;"
+        var memoArray: [Memo] = []
         
-        
-        
-        return []
+        if sqlite3_prepare_v2(db, queryStatementString, -1, &queryStatement, nil) == SQLITE_OK {
+            sqlite3_bind_int(queryStatement, 0, Int32(recordPerPage))
+            //로직 수정
+            sqlite3_bind_int(queryStatement, 1, Int32((recordPerPage*selectedPage - 1)))
+            //execute statement
+            //read value of title column
+            while sqlite3_step(queryStatement) == SQLITE_ROW {
+                let id = sqlite3_column_int(queryStatement, 1)
+                let queryResultColLastUpdateTime = sqlite3_column_double(queryStatement, 4)
+                guard let queryResultColTitle = sqlite3_column_text(queryStatement, 2),
+                      let queryResultColContent = sqlite3_column_text(queryStatement, 3) else {
+                    print("\nQuery result is nil")
+                    return memoArray
+                }
+                //read values of title
+                let title = String(cString: queryResultColTitle)
+                let content = String(cString: queryResultColContent)
+                let lastUpdateTime = queryResultColLastUpdateTime
+                let memo: Memo = Memo(title: title, content: content, lastUpdateTime: lastUpdateTime, id: Int(id))
+                memoArray.append(memo)
+            }
+        }
+        return memoArray
     }
 }

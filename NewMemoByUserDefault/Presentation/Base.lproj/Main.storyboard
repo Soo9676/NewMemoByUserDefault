@@ -133,7 +133,10 @@
                                                             <constraint firstAttribute="width" secondItem="iOv-Ex-QJ1" secondAttribute="height" multiplier="1:1" id="Nf4-hR-aVg"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain"/>
+                                                        <connections>
+                                                            <action selector="moveToLeftPage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kU8-bp-M0E"/>
+                                                        </connections>
                                                     </button>
                                                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="qgx-8n-CBI">
                                                         <rect key="frame" x="54" y="0.0" width="286" height="54"/>
@@ -152,13 +155,16 @@
                                                                     <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
-                                                                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yCU-Yx-cyy">
-                                                                            <rect key="frame" x="26" y="48" width="76" height="31"/>
-                                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yCU-Yx-cyy">
+                                                                            <rect key="frame" x="26" y="48.5" width="76" height="31"/>
                                                                             <state key="normal" title="Button"/>
                                                                             <buttonConfiguration key="configuration" style="tinted" title="Number"/>
                                                                         </button>
                                                                     </subviews>
+                                                                    <constraints>
+                                                                        <constraint firstItem="yCU-Yx-cyy" firstAttribute="centerX" secondItem="v8l-P0-isK" secondAttribute="centerX" id="V4L-j4-FSt"/>
+                                                                        <constraint firstItem="yCU-Yx-cyy" firstAttribute="centerY" secondItem="v8l-P0-isK" secondAttribute="centerY" id="mDF-Nm-fEr"/>
+                                                                    </constraints>
                                                                 </collectionViewCellContentView>
                                                                 <connections>
                                                                     <outlet property="pageButton" destination="yCU-Yx-cyy" id="GIH-x1-9sv"/>
@@ -176,7 +182,10 @@
                                                             <constraint firstAttribute="width" secondItem="MwQ-hc-KLh" secondAttribute="height" multiplier="1:1" id="bf6-v9-99D"/>
                                                         </constraints>
                                                         <state key="normal" title="Button"/>
-                                                        <buttonConfiguration key="configuration" style="plain" title="Button"/>
+                                                        <buttonConfiguration key="configuration" style="plain"/>
+                                                        <connections>
+                                                            <action selector="moveToRightPage:" destination="BYZ-38-t0r" eventType="touchUpInside" id="c3b-xE-jdf"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </stackView>

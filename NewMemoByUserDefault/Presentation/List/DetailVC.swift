@@ -48,7 +48,7 @@ class DetailVC: UIViewController {
     @IBAction func tapUpdateButton(_ sender: Any) {
         var jsonString: String?
         let currentTime = recordCurrentTime()
-        let uuid = UUID().uuidString
+        
 
         if let title = titleTextField.text,
            let content = contentsTextView.text {
