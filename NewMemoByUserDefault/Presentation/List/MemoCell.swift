@@ -25,6 +25,7 @@ class MemoCell: UITableViewCell {
     @IBOutlet weak var updateButton: UIButton!
     
     var id: Int = 0
+    var repository = MemoRepository()
     var memoData: Memo?{
         didSet{
             configurationUIwithData() 
@@ -39,6 +40,7 @@ class MemoCell: UITableViewCell {
     
 //    테이블뷰 dataSource에서 넘겨받은 Memo 타입의 객체 값을 UI에 뿌려주기
     func configurationUIwithData() {
+        
         title = memoData?.title
         contents = memoData?.content
         lastUpdateTime = memoData?.lastUpdateTime

@@ -13,10 +13,8 @@ class MainViewController: UIViewController {
     let numberOfMemoInPage: Int = 4 //페이지당 보여줄 데이터 개수 (디폴트 값 4)
     var memoListInPage: [Memo] = [] //페이지당 보여줄 데이터 리스트
     var pageListToShow: [Int] = [] //전체 페이지 개수 =< numberOfMemoInPage e.g.) [2,3,4,5,6] or [1,2,3]
-    var presentPage: Int? //현재 선택된 페이지 수
-    var idList: [Int] = [] //전체 데이터 개수
-    var memoList: [Memo] = []
     var selectedPageInt: Int = 1
+    var memoCount: Int = 0
     let sectionInsets = UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5)
     
     @IBOutlet weak var memoTableView: UITableView!
@@ -28,15 +26,10 @@ class MainViewController: UIViewController {
     
     
     override func viewWillAppear(_ animated: Bool) {
-        memoList = repository.getRecordList()
-        memoListInPage = repository.getRecordListInPage(selectedPage: 1, recordPerPage: numberOfMemoInPage)
-        let idList = memoList.map({ (memo: Memo) -> Int in
-            return memo.id
-        })
-        repository.numberOfMemoInPage = self.numberOfMemoInPage
-        self.idList = idList
+        memoCount = repository.getCountOf(columnNamed: "id")
+        memoListInPage = repository.getRecordListInPage(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
         //전체 메모 개수가 한페이지(기본값4)이하면 페이지 리스트를 표시하지 않는다
-        if idList.count <= numberOfMemoInPage {
+        if memoListInPage.count <= numberOfMemoInPage {
             viewEmbeddingStack.isHidden = true
         }
         memoTableView.reloadData()
@@ -45,24 +38,23 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        memoList = repository.getRecordList()
-        let idList = memoList.map({ (memo: Memo) -> Int in
-            return memo.id
-        })
-        repository.numberOfMemoInPage = self.numberOfMemoInPage
-        self.idList = idList
+        memoCount = repository.getCountOf(columnNamed: "id")
+        memoListInPage = repository.getRecordListInPage(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
         setPageControlButtonImg()
-        if idList.count <= numberOfMemoInPage {
+        if memoListInPage.count <= numberOfMemoInPage {
             viewEmbeddingStack.isHidden = true
         }
         memoTableView.reloadData()
         pagesCollection.reloadData()
-
     }
     
     func setPageControlButtonImg() {
         moveToLeftPageButton.setImage(UIImage(systemName: "arrow.left.circle"), for: .normal)
         moveToRightPageButton.setImage(UIImage(systemName: "arrow.right.circle"), for: .normal)
+    }
+    
+    func reloadAll() {
+        
     }
     
     @IBAction func addBarButttonTapped(_ sender: Any) {
@@ -73,7 +65,7 @@ class MainViewController: UIViewController {
         if segue.identifier == "MoveToDetail" {
             let detailVC = segue.destination as! DetailVC
             guard let indexPath = sender as? IndexPath else {return}
-            detailVC.id = idList[indexPath.row]
+            detailVC.id = memoListInPage[indexPath.row].id
             print("id 전달 완료")
         }
     }
@@ -90,7 +82,7 @@ class MainViewController: UIViewController {
     
     @IBAction func moveToRightPage(_ sender: Any) {
         selectedPageInt += 1
-        if selectedPageInt == repository.getTotalPageList().last {
+        if selectedPageInt == repository.getTotalPageList(numberOfMemoInPage: numberOfMemoInPage).last {
             moveToRightPageButton.isEnabled = false
         } else {
             moveToRightPageButton.isEnabled = true
@@ -103,15 +95,16 @@ class MainViewController: UIViewController {
 
 extension MainViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return repository.getRecordListInPage(selectedPage: selectedPageInt, recordPerPage: numberOfMemoInPage).count
+        return memoListInPage.count //수정 필요
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let id = repository.getRecordListInPage(selectedPage: selectedPageInt, recordPerPage: numberOfMemoInPage)[indexPath.row].id
+        print("\n\(indexPath.row)")
+        let id = memoListInPage[indexPath.row].id
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "MemoCell", for: indexPath) as? MemoCell else {return UITableViewCell()}
 
-        cell.memoData = repository.getRecord(recordtWith: id)
+        cell.memoData = memoListInPage[indexPath.row]
         cell.id = id
         cell.updateButtonPressed = { [weak self] (senderCall) in
             //뷰컨트롤러에 있는 세그웨이 실행
@@ -123,11 +116,11 @@ extension MainViewController: UITableViewDataSource {
 
 extension MainViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let dateToEdit = idList[indexPath.row]
+        let idOfRowToDelete = memoListInPage[indexPath.row].id
         if editingStyle == .delete {
-            idList.remove(at: indexPath.row)
+            memoListInPage.remove(at: indexPath.row)
             memoTableView.deleteRows(at: [indexPath], with: .fade)
-            repository.delete(recordWith: dateToEdit)
+            repository.delete(recordWith: idOfRowToDelete)
             memoTableView.reloadData()
         }
     }
@@ -135,16 +128,23 @@ extension MainViewController: UITableViewDelegate {
 
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        pageListToShow = repository.getPageListToShow(selectedPage: selectedPageInt)
-        return pageListToShow.count
+        pageListToShow = repository.getPageListToShow(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
+        return pageListToShow.count //수정 필요
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pageCell", for: indexPath) as? PageCell else {
             return UICollectionViewCell()
         }
-        pageListToShow = repository.getPageListToShow(selectedPage: selectedPageInt)
+        pageListToShow = repository.getPageListToShow(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
         cell.pageButton.setTitle("\(pageListToShow[indexPath.row])", for: .normal)
+        cell.pageButtonPressed = { [weak self] (senderCall) in
+            //메인vc의 테이블, 콜렉션 뷰 다시 그리기
+            guard let pageNum = self?.pageListToShow[indexPath.row] else { return }
+            self?.selectedPageInt = pageNum
+            self?.memoTableView.reloadData()
+            self?.pagesCollection.reloadData()
+        }
         return cell
     }
 }
@@ -176,39 +176,6 @@ extension MainViewController: UICollectionViewDelegate {
         }
         cell.pageButton.titleLabel?.textAlignment = .center
 
-//
-//        //섞이지 않으면 경고창 띄우기
-//        guard !(derivedArray == originalArray) else {
-//            let alert = UIAlertController(title: "경고", message: "아직 섞이지 않음\n버튼을 섞어 게임을 시작하시겠습니까?🕹", preferredStyle: .alert)
-//            let okAction = UIAlertAction(title: "OK", style: .default, handler: tapStartButton(_:))
-//            alert.addAction(okAction)
-//            present(alert, animated: false, completion: nil)
-//            return
-//        }
-//
-//        //몇번쨰 탭인지 비교
-//        if Int(buttonText) == nthTab {
-//            //선택한 셀이 마지막 셀이면 성공화면, 틀리면 실패화면, 순서는 맞지만 마지막이 아니라면 nthTab 1 증가시킨 후 통과
-//            guard Int(buttonText) == derivedArray.count else {
-//                nthTab += 1
-//                cell.myButton.backgroundColor = .yellow
-//                cell.contentView.isHidden = false
-//                return
-//            }
-//            cell.myButton.backgroundColor = .blue
-//            let alert = UIAlertController(title: "성공", message: "순서 맞추기 성공🥳", preferredStyle: .alert)
-//            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-//            alert.addAction(okAction)
-//            present(alert, animated: false, completion: nil)
-//        } else {
-//            cell.myButton.backgroundColor = .red
-//            let alert = UIAlertController(title: "실패", message: "순서 맞추기 실패🥲\n리셋하시겠습니까?", preferredStyle: .alert)
-//            let okAction = UIAlertAction(title: "새로", style: .destructive, handler: tapStartButton(_:))
-//            let cancelAction = UIAlertAction(title: "이어서", style: .cancel, handler: nil)
-//            alert.addAction(okAction)
-//            alert.addAction(cancelAction)
-//            present(alert, animated: false, completion: nil)
-//        }
     }
     
 }
