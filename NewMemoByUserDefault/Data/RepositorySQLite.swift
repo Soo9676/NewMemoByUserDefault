@@ -252,13 +252,14 @@ class MemoRepository: MemoRepositoryProtocol {
         if totalNumberOfMemo <= numberOfMemoInPage {
             return [1]
         } else {
-            let quotient: Int = totalNumberOfMemo/numberOfMemoInPage
-            let remainder: Int = totalNumberOfMemo%numberOfMemoInPage
+            let quotient: Int = totalNumberOfMemo/numberOfMemoInPage //몫
+            let remainder: Int = totalNumberOfMemo%numberOfMemoInPage //나머지
             if remainder == 0 {
                 totalPageList.append(contentsOf: 1...quotient)
             } else {
                 totalPageList.append(contentsOf: 1...(quotient + 1))
             }
+            print("Memorepository.getToatalPageList의 콘텐츠 내용 \(totalPageList)")
             return totalPageList
         }
     }

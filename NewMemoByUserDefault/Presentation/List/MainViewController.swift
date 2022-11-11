@@ -13,7 +13,12 @@ class MainViewController: UIViewController {
     let numberOfMemoInPage: Int = 4 //페이지당 보여줄 데이터 개수 (디폴트 값 4)
     var memoListInPage: [Memo] = [] //페이지당 보여줄 데이터 리스트
     var pageListToShow: [Int] = [] //전체 페이지 개수 =< numberOfMemoInPage e.g.) [2,3,4,5,6] or [1,2,3]
-    var selectedPageInt: Int = 1
+    var selectedPageInt: Int = 1 {
+        didSet {
+            memoTableView.reloadData()
+            pagesCollection.reloadData()
+        }
+    }
     var memoCount: Int = 0
     let sectionInsets = UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5)
     
@@ -29,7 +34,7 @@ class MainViewController: UIViewController {
         memoCount = repository.getCountOf(columnNamed: "id")
         memoListInPage = repository.getRecordListInPage(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
         //전체 메모 개수가 한페이지(기본값4)이하면 페이지 리스트를 표시하지 않는다
-        if memoListInPage.count <= numberOfMemoInPage {
+        if memoCount <= numberOfMemoInPage {
             viewEmbeddingStack.isHidden = true
         }
         memoTableView.reloadData()
@@ -41,7 +46,7 @@ class MainViewController: UIViewController {
         memoCount = repository.getCountOf(columnNamed: "id")
         memoListInPage = repository.getRecordListInPage(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
         setPageControlButtonImg()
-        if memoListInPage.count <= numberOfMemoInPage {
+        if memoCount <= numberOfMemoInPage {
             viewEmbeddingStack.isHidden = true
         }
         memoTableView.reloadData()
@@ -51,10 +56,6 @@ class MainViewController: UIViewController {
     func setPageControlButtonImg() {
         moveToLeftPageButton.setImage(UIImage(systemName: "arrow.left.circle"), for: .normal)
         moveToRightPageButton.setImage(UIImage(systemName: "arrow.right.circle"), for: .normal)
-    }
-    
-    func reloadAll() {
-        
     }
     
     @IBAction func addBarButttonTapped(_ sender: Any) {
@@ -76,19 +77,19 @@ class MainViewController: UIViewController {
         } else {
             moveToLeftPageButton.isEnabled = true
         }
-        pagesCollection.reloadData()
-        memoTableView.reloadData()
+        print("selectedPage: \(selectedPageInt)")
+//        pagesCollection.reloadData()
+//        memoTableView.reloadData()
     }
     
     @IBAction func moveToRightPage(_ sender: Any) {
         selectedPageInt += 1
-        if selectedPageInt == repository.getTotalPageList(numberOfMemoInPage: numberOfMemoInPage).last {
+        if selectedPageInt == repository.getPageListToShow(selectedPage: selectedPageInt, numberOfMemoInPage: <#T##Int#>) {
             moveToRightPageButton.isEnabled = false
         } else {
             moveToRightPageButton.isEnabled = true
         }
-        pagesCollection.reloadData()
-        memoTableView.reloadData()
+        print("selectedPage: \(selectedPageInt)")
     }
     
 }
