@@ -53,7 +53,7 @@ class DetailVC: UIViewController {
         if let title = titleTextField.text,
            let content = contentsTextView.text {
             var memo = Memo(title: title, content: content, lastUpdateTime: currentTime, id: 0)
-            //id없으면 insert, id 있으면 해당 id로 update
+            //id없으면 insert, id 있으면 해당 id로 update (내용 동일한지 확인 없음)
             if let id = id {
                 memo.id = id
                 repository.update(memo: memo) {

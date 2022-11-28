@@ -97,7 +97,7 @@ class MemoRepository: MemoRepositoryProtocol {
     //insert, get(select), update, delete
     func insert(memo: Memo, completion: @escaping () -> Void) {
         var insertStatement: OpaquePointer?
-        let insertStatementString = "INSERT INTO memo (id, title, content, last_update_time) VALUES (?,?,?,?)"
+        let insertStatementString = "INSERT INTO memo ( title, content, last_update_time) VALUES (?,?,?)"
 
         if sqlite3_prepare_v2(db, insertStatementString, -1, &insertStatement, nil) == SQLITE_OK {
             
@@ -106,9 +106,9 @@ class MemoRepository: MemoRepositoryProtocol {
             let lastUpdateTime: Double = memo.lastUpdateTime
             
             //값 바인딩
-            sqlite3_bind_text(insertStatement, 2, title.cString(using: .utf8), -1, nil)
-            sqlite3_bind_text(insertStatement, 3, content.cString(using: .utf8), -1, nil)
-            sqlite3_bind_double(insertStatement, 4, lastUpdateTime)
+            sqlite3_bind_text(insertStatement, 1, title.cString(using: .utf8), -1, nil)
+            sqlite3_bind_text(insertStatement, 2, content.cString(using: .utf8), -1, nil)
+            sqlite3_bind_double(insertStatement, 3, lastUpdateTime)
             
             //쿼리 실행하기 위해 스텝 밟기
             if sqlite3_step(insertStatement) == SQLITE_DONE {
@@ -175,6 +175,7 @@ class MemoRepository: MemoRepositoryProtocol {
                 let lastUpdateTime = queryResultColLastUpdateTime
                 sqlite3_finalize(queryStatement)
                 return Memo(title: title, content: content, lastUpdateTime: lastUpdateTime, id: id)
+                print("\(Memo(title: title, content: content, lastUpdateTime: lastUpdateTime, id: id))")
             } else {
                 print("\nQuery returned no results")
             }

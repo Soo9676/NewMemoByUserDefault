@@ -12,11 +12,15 @@ class MainViewController: UIViewController {
     let repository = MemoRepository()
     let numberOfMemoInPage: Int = 4 //페이지당 보여줄 데이터 개수 (디폴트 값 4)
     var memoListInPage: [Memo] = [] //페이지당 보여줄 데이터 리스트
+    
     var pageListToShow: [Int] = [] //전체 페이지 개수 =< numberOfMemoInPage e.g.) [2,3,4,5,6] or [1,2,3]
     var selectedPageInt: Int = 1 {
         didSet {
+            memoListInPage = repository.getRecordListInPage(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
+            
             memoTableView.reloadData()
             pagesCollection.reloadData()
+            
         }
     }
     var memoCount: Int = 0
@@ -84,7 +88,7 @@ class MainViewController: UIViewController {
     
     @IBAction func moveToRightPage(_ sender: Any) {
         selectedPageInt += 1
-        if selectedPageInt == repository.getPageListToShow(selectedPage: selectedPageInt, numberOfMemoInPage: <#T##Int#>) {
+        if selectedPageInt == repository.getPageListToShow(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage).last {
             moveToRightPageButton.isEnabled = false
         } else {
             moveToRightPageButton.isEnabled = true
@@ -143,8 +147,6 @@ extension MainViewController: UICollectionViewDataSource {
             //메인vc의 테이블, 콜렉션 뷰 다시 그리기
             guard let pageNum = self?.pageListToShow[indexPath.row] else { return }
             self?.selectedPageInt = pageNum
-            self?.memoTableView.reloadData()
-            self?.pagesCollection.reloadData()
         }
         return cell
     }
