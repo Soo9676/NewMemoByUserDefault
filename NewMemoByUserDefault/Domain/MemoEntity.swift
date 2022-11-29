@@ -14,3 +14,7 @@ struct Memo: Codable {
     var id: Int
 }
 
+struct MinimumMemo: Codable {
+    var title: String
+    var lastUpdateTime: Double
+}

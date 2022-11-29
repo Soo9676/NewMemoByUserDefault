@@ -48,6 +48,7 @@ class MemoRepository: MemoRepositoryProtocol {
       
         var statement: OpaquePointer? //컴파일된 SQL을 담을 객체
         let sql = "CREATE TABLE IF NOT EXISTS memo (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, last_update_time REAL NOT NULL)"
+        //empty인 값도 에러처리 하도록 처리
         //SQL 컴파일이 잘 끝났다면
         guard sqlite3_prepare(db, sql, -1, &statement, nil) == SQLITE_OK else {
             print("\nPrepare Statement Fail")
@@ -187,6 +188,10 @@ class MemoRepository: MemoRepositoryProtocol {
         return nil
     }
     
+//    func getTitleContentsRecord(recordWith id: Int) -> [MinimumMemo] {
+//        return M
+//    }
+    
     func getCountOf(columnNamed name: String) -> Int {
         var  queryStatement: OpaquePointer?
         let queryStatementString = "SELECT COUNT(?) FROM memo;"
@@ -266,6 +271,8 @@ class MemoRepository: MemoRepositoryProtocol {
     }
     
     //페이지 컨트롤에 띄울 최대길이 5인 리스트 반환
+    
+//토탈 카운트 한번만 사용하도록
     func getPageListToShow(selectedPage: Int, numberOfMemoInPage: Int) -> [Int] {
         let totalPage = getTotalPageList(numberOfMemoInPage: numberOfMemoInPage)
         var pageListToShow: [Int] = []

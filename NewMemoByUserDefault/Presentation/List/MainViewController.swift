@@ -5,6 +5,9 @@
 //  Created by Soo J on 2022/10/04.
 //
 
+
+//TODO: 데이터 100개 집어넣는 버튼
+//페이지 5씩 뛰어넘는 
 import UIKit
 
 class MainViewController: UIViewController {
@@ -12,8 +15,14 @@ class MainViewController: UIViewController {
     let repository = MemoRepository()
     let numberOfMemoInPage: Int = 4 //페이지당 보여줄 데이터 개수 (디폴트 값 4)
     var memoListInPage: [Memo] = [] //페이지당 보여줄 데이터 리스트
-    
-    var pageListToShow: [Int] = [] //전체 페이지 개수 =< numberOfMemoInPage e.g.) [2,3,4,5,6] or [1,2,3]
+    //[] 메모리스트객체와 상세메모객체 분리
+    var minimumMemoListInPage: [MinimumMemo] = [] //페이지에서 보여줄 메모 리스트 (타이틀, 제목만)
+    //전체 페이지 개수 =< numberOfMemoInPage e.g.) [2,3,4,5,6] or [1,2,3]
+    var pageListToShow: [Int] = [] {
+        didSet {
+            
+        }
+    }
     var selectedPageInt: Int = 1 {
         didSet {
             memoListInPage = repository.getRecordListInPage(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
@@ -24,8 +33,9 @@ class MainViewController: UIViewController {
             
         }
     }
+    
     var memoCount: Int = 0
-    let sectionInsets = UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5)
+    let sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     
     @IBOutlet weak var memoTableView: UITableView!
     @IBOutlet weak var addBarButton: UIBarButtonItem!
@@ -218,4 +228,12 @@ extension MainViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: cellWidth, height: cellHeight)
         
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+            return sectionInsets
+        }
+        
+        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+            return sectionInsets.left
+        }
 }
