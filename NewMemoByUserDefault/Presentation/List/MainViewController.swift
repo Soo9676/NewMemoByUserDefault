@@ -17,7 +17,8 @@ class MainViewController: UIViewController {
     var selectedPageInt: Int = 1 {
         didSet {
             memoListInPage = repository.getRecordListInPage(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
-            
+            pageListToShow = repository.getPageListToShow(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
+            configureArrowButton(selectedPage: selectedPageInt)
             memoTableView.reloadData()
             pagesCollection.reloadData()
             
@@ -37,6 +38,7 @@ class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         memoCount = repository.getCountOf(columnNamed: "id")
         memoListInPage = repository.getRecordListInPage(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
+        pageListToShow = repository.getPageListToShow(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
         //전체 메모 개수가 한페이지(기본값4)이하면 페이지 리스트를 표시하지 않는다
         if memoCount <= numberOfMemoInPage {
             viewEmbeddingStack.isHidden = true
@@ -50,6 +52,7 @@ class MainViewController: UIViewController {
         memoCount = repository.getCountOf(columnNamed: "id")
         memoListInPage = repository.getRecordListInPage(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
         setPageControlButtonImg()
+        pageListToShow = repository.getPageListToShow(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
         if memoCount <= numberOfMemoInPage {
             viewEmbeddingStack.isHidden = true
         }
@@ -76,11 +79,7 @@ class MainViewController: UIViewController {
     }
     @IBAction func moveToLeftPage(_ sender: Any) {
         selectedPageInt -= 1
-        if selectedPageInt == 1 {
-            moveToLeftPageButton.isEnabled = false
-        } else {
-            moveToLeftPageButton.isEnabled = true
-        }
+        configureArrowButton(selectedPage: selectedPageInt)
         print("selectedPage: \(selectedPageInt)")
 //        pagesCollection.reloadData()
 //        memoTableView.reloadData()
@@ -88,12 +87,28 @@ class MainViewController: UIViewController {
     
     @IBAction func moveToRightPage(_ sender: Any) {
         selectedPageInt += 1
-        if selectedPageInt == repository.getPageListToShow(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage).last {
-            moveToRightPageButton.isEnabled = false
-        } else {
-            moveToRightPageButton.isEnabled = true
-        }
+        configureArrowButton(selectedPage: selectedPageInt)
+        
         print("selectedPage: \(selectedPageInt)")
+    }
+    
+    func configureArrowButton(selectedPage: Int) {
+        
+        if pageListToShow.count == 1 {
+            moveToRightPageButton.isEnabled = false
+            moveToLeftPageButton.isEnabled = false
+        } else {
+            if selectedPageInt == pageListToShow.last {
+                moveToRightPageButton.isEnabled = false
+                moveToLeftPageButton.isEnabled = true
+            } else if selectedPageInt == pageListToShow.first {
+                moveToRightPageButton.isEnabled = true
+                moveToLeftPageButton.isEnabled = false
+            } else {
+                moveToRightPageButton.isEnabled = true
+                moveToLeftPageButton.isEnabled = true
+            }
+        }
     }
     
 }
@@ -133,7 +148,6 @@ extension MainViewController: UITableViewDelegate {
 
 extension MainViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        pageListToShow = repository.getPageListToShow(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
         return pageListToShow.count //수정 필요
     }
     
@@ -141,8 +155,15 @@ extension MainViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "pageCell", for: indexPath) as? PageCell else {
             return UICollectionViewCell()
         }
-        pageListToShow = repository.getPageListToShow(selectedPage: selectedPageInt, numberOfMemoInPage: numberOfMemoInPage)
         cell.pageButton.setTitle("\(pageListToShow[indexPath.row])", for: .normal)
+        if pageListToShow[indexPath.row] == selectedPageInt {
+            cell.pageButton.backgroundColor = .yellow
+            cell.pageButton.titleLabel?.textColor = .black
+        } else {
+            cell.pageButton.backgroundColor = .clear
+            cell.pageButton.titleLabel?.textColor = .blue
+        }
+        cell.pageButton.titleLabel?.textAlignment = .center
         cell.pageButtonPressed = { [weak self] (senderCall) in
             //메인vc의 테이블, 콜렉션 뷰 다시 그리기
             guard let pageNum = self?.pageListToShow[indexPath.row] else { return }
@@ -169,7 +190,7 @@ extension MainViewController: UICollectionViewDelegate {
         collectionView.reloadData()
         memoTableView.reloadData()
         
-        //선택된 버튼과 아닌 버튼 ui set
+        //현재 선택된 버튼과 아닌 버튼 ui set
         if buttonInt == selectedPageInt {
             cell.pageButton.backgroundColor = .yellow
             cell.pageButton.titleLabel?.textColor = .black

@@ -49,8 +49,8 @@ class MemoRepository: MemoRepositoryProtocol {
         var statement: OpaquePointer? //컴파일된 SQL을 담을 객체
         let sql = "CREATE TABLE IF NOT EXISTS memo (id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL, content TEXT NOT NULL, last_update_time REAL NOT NULL)"
         //SQL 컴파일이 잘 끝났다면
-        guard sqlite3_prepare(db, sql, -1, &statement, nil) == SQLITE_OK else {            print("\nPrepare Statement Fail")
-            
+        guard sqlite3_prepare(db, sql, -1, &statement, nil) == SQLITE_OK else {
+            print("\nPrepare Statement Fail")
             return
         }
         
